@@ -751,6 +751,11 @@ class Client(object):
                 logger.debug("Headers: %s", r.headers)
                 filename = get_filename(r, download_id)
 
+                if os.path.isfile(filename):
+                    logger.info("File %s exists, skipping" % (filename,))
+                    r.close()
+                    return filename
+
                 try:
                     # https://github.com/ecmwf/hda/issues/3
                     size = int(r.headers.get("Content-Length", size))
